@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>PHP基础操作</title>
+</head>
+<body style="margin: 20px 50px">
+	<h1>PHP基础操作</h1>
+	<form action="request.php" method="get">
+		<label for="username">用户</label>
+		<input type="text" name="username" id="username">
+		<br><br>
+		<label for="password">密码</label>
+		<input type="text" name="password" id="password">
+		<br><br>
+		<input type="submit" value="提交" id="btn">
+	</form>
+</body>
+<script src="https://assets.xrkcdn.com/framework/js/jquery-2.1.4.js"></script>
+<script type="text/javascript">
+	// form表单与ajax
+	$('#btn').click(function(e){
+		e.preventDefault() // 阻止默认事件,这样点击提交之后,页面不跳走(不提交表单)
+		$.ajax({
+			url: 'ajax.php',
+			type: 'get',
+			dataType: 'json',
+			data: {
+				username: $('#username').val(),// 这里如果value为空,会直接过滤掉对应的数据项
+				password: $('#password').val()// 例如username为空,则传过去的只有password这一项
+			},
+			success: function(res){
+				console.log(res);
+			},
+			error: function(res){
+				console.log(res);
+			}
+		})
+	})
+</script>
+</html>

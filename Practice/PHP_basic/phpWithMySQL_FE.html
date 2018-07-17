@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>新闻管理系统</title>
+</head>
+<body>
+	<form action="phpWithMySQL_FE.php" method="post">
+	<p>
+		<label for="newstitle">新闻标题</label>
+		<!-- name最好和数据库字段一致 -->
+		<input type="text" name="newstitle" id="newstitle">
+	</p>
+	<p>
+		<label for="newsimg">图片地址</label>
+		<input type="text" name="newsimg" id="newsimg">
+	</p>
+	<p>
+		<label for="newscontent">新闻内容</label>
+		<textarea name="newscontent" id="newscontent"></textarea>
+	</p>
+	<p>
+		<label for="addtime">新闻时间</label>
+		<input type="date" name="addtime" id="addtime"></input>
+	</p>
+	<p>
+		<input type="submit" value="提交">
+		<input type="reset" value="重置">
+	</p>
+	</form>
+</body>
+<script src="https://assets.xrkcdn.com/framework/js/jquery-2.1.4.js"></script>
+</html>
