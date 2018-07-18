@@ -1,46 +1,60 @@
 <?php 
 	$servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = 'phplesson';
-    
-    // 创建连接
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-     
-    // 检测连接
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }else{
-        // echo "连接成功";
-        // 判断查询还是更新
-        $action = $_POST["action"];
-        switch ($action) {
-            // 查询当前点赞数
-            case 'select':
-                $sql = "SELECT `num` FROM `praise`";
-                $result = mysqli_query($conn, $sql);
-                // 返回结果集中行的数量，判断有无数据读出来！
-                if (mysqli_num_rows($result) > 0) {
-                    // 输出数据：从结果集中取得一行作为关联数组
-                    while($row = mysqli_fetch_assoc($result)) {
-                        echo '{"code":"200","num":"'.$row["num"].'"}';
-                    }
-                } else {
-                    echo '{"code":"100","msg":"no data"}';
-                }
-                break;
+	$username = "root";
+	$password = "";
+	$dbname = "test";
 
-            // 点赞数更新
-            case 'update':
-                $num = $_POST["num"];
-                $sql = "UPDATE `praise` SET `num`='{$num}'";
-                mysqli_query($conn, $sql);
-                break;
-            default:
-                # code...
-                break;
-        }
-        // 关闭数据库
-        mysqli_close($conn);
-    }
+	// 创建连接
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	// 设置字符编码
+	$conn->query("set names utf8");
+	// 检测连接
+	if ($conn->connect_error) {
+	    die("连接失败: " . $conn->connect_error);
+	} 
+
+
+	// 判断查询还是插入
+	$action = $_POST["action"];
+	
+	switch ($action) {
+		case 'select':
+			// 查询
+		    $sql = "SELECT num FROM praise";
+			$result = $conn->query($sql);
+			if ($result->num_rows > 0) {
+				// 输出数据
+				while($row = $result->fetch_assoc()) {
+					$num = array('num' => $row["num"],'error'=> 0);
+					echo json_encode($num);
+				}
+			} else {
+				// 插入一条数据！
+				$sql = "INSERT INTO praise (num) VALUES (0)";
+				if ($conn->query($sql) === TRUE) {
+				    $num = array('num' => 0,'error'=> 0);
+					echo json_encode($num);
+				} else {
+				    echo '{"error":"1"}';
+				}
+				
+			}
+			break;
+		case 'update':
+			$num = $_POST["num"];
+			// 更新
+			$sql = "UPDATE praise SET num = '{$num}'";
+			$conn->query($sql);
+			if(mysqli_affected_rows($conn) > 0){
+				echo '{"error":"0"}';
+			}else{
+				echo '{"error":"1"}';
+			}
+			break;
+		default:
+			break;
+	}
+		
+
+	$conn->close();
  ?>
